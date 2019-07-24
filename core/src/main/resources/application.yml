@@ -1,0 +1,17 @@
+server:
+  port: 8080
+  compression:
+    enabled: true
+  servlet:
+    context-path: /
+
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      base-path: /
+
+spring:
+  application:
+    name: mo-paia-service
