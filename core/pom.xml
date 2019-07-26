@@ -12,10 +12,6 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <build>
-        <finalName>${project.parent.artifactId}-${project.parent.version}</finalName>
-    </build>
-
     <dependencies>
         <!-- Models -->
         <dependency>
@@ -98,4 +94,33 @@
         </dependency>
 
     </dependencies>
+
+    <build>
+        <finalName>${project.parent.artifactId}-${project.parent.version}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${springboot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>true</executable>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
 </project>
