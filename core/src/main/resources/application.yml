@@ -15,3 +15,12 @@ management:
 spring:
   application:
     name: mo-paia-service
+  datasource:
+    hikari:
+      jdbc-url: jdbc:postgresql://localhost:5432/postgres
+      schema: mopaia
+      username: mo-paia-service
+      password: mo-paia-service
+      driver-class-name: org.postgresql.Driver
+      maximum-pool-size: 10
+      connection-timeout: 10000
