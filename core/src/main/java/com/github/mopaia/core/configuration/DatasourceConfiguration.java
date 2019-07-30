@@ -1,4 +1,4 @@
-package com.github.mopaia.core.config;
+package com.github.mopaia.core.configuration;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
