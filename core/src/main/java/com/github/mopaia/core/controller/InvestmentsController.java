@@ -1,11 +1,10 @@
 package com.github.mopaia.core.controller;
 
+import com.github.mopaia.core.controller.dto.InvestmentDepositDTO;
 import com.github.mopaia.core.dao.InvestmentRepository;
 import com.github.mopaia.core.dao.model.Investment;
 import com.github.mopaia.core.dao.model.InvestmentDeposit;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -50,10 +48,4 @@ public class InvestmentsController {
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
-    @Getter
-    @Setter
-    public static class InvestmentDepositDTO {
-        private String investorName;
-        private BigDecimal amount;
-    }
 }
