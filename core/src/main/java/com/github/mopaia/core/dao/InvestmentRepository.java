@@ -38,7 +38,7 @@ public class InvestmentRepository {
     @Transactional(readOnly = true)
     public List<Investment> list() {
         return jdbcTemplate.query(
-                "select id, name, created_at from investments",
+                "select id, name, created_at from investments order by created_at desc",
                 investmentRowMapper);
     }
 
@@ -51,21 +51,22 @@ public class InvestmentRepository {
     }
 
     @Transactional
-    public Optional<UUID> deposit(UUID investmentId, String investorName, BigDecimal amount) {
+    public Optional<InvestmentDeposit> deposit(UUID investmentId, String investorName, BigDecimal amount) {
         UUID id = UUID.randomUUID();
+        Instant createdAt = Instant.now();
         return jdbcTemplate.update("insert into investments_deposits (id, investment_id, investor_name, amount, created_at) values (:id, :investment_id, :investor_name, :amount, :created_at)",
                 new MapSqlParameterSource()
                         .addValue("id", id)
                         .addValue("investment_id", investmentId)
                         .addValue("investor_name", investorName)
                         .addValue("amount", amount)
-                        .addValue("created_at", Timestamp.from(Instant.now()))) > 0
-                ? Optional.of(id)
+                        .addValue("created_at", Timestamp.from(createdAt))) > 0
+                ? Optional.of(new InvestmentDeposit(id, investmentId, investorName, amount, createdAt))
                 : Optional.empty();
     }
 
     public List<InvestmentDeposit> listDeposits(UUID investmentId) {
-        return jdbcTemplate.query("select id, investment_id, investor_name, amount, created_at from investments_deposits  where investment_id = :investment_id",
+        return jdbcTemplate.query("select id, investment_id, investor_name, amount, created_at from investments_deposits  where investment_id = :investment_id order by created_at desc",
                 Collections.singletonMap("investment_id", investmentId),
                 investmentDepositRowMapper);
     }

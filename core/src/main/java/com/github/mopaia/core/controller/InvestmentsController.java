@@ -1,6 +1,6 @@
 package com.github.mopaia.core.controller;
 
-import com.github.mopaia.core.controller.dto.InvestmentDepositDTO;
+import com.github.mopaia.core.controller.dto.InvestmentDepositRequestDTO;
 import com.github.mopaia.core.dao.InvestmentRepository;
 import com.github.mopaia.core.dao.model.Investment;
 import com.github.mopaia.core.dao.model.InvestmentDeposit;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -42,10 +43,10 @@ public class InvestmentsController {
     }
 
     @PostMapping("/{id}/deposits")
-    public ResponseEntity putMoneyOnInvestment(@PathVariable("id") UUID investmentId, @RequestBody InvestmentDepositDTO investmentDepositDTO) {
-        return investmentRepository.deposit(investmentId, investmentDepositDTO.getInvestorName(), investmentDepositDTO.getAmount())
-                .map(id -> ResponseEntity.created(URI.create(String.format("/investments/%s/deposits/%s", investmentId, id))).build())
-                .orElseGet(() -> ResponseEntity.badRequest().build());
+    public ResponseEntity<Object> putMoneyOnInvestment(@PathVariable("id") UUID investmentId, @RequestBody @Valid InvestmentDepositRequestDTO investmentDepositRequestDTO) {
+        return investmentRepository.deposit(investmentId, investmentDepositRequestDTO.getInvestorName(), investmentDepositRequestDTO.getAmount())
+                .map(deposit -> ResponseEntity.created(URI.create(String.format("/investments/%s/deposits/%s", investmentId, deposit.getId()))))
+                .orElseGet(ResponseEntity::badRequest)
+                .build();
     }
-
 }
