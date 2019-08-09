@@ -20,7 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProductReviewRepository {
 
-    private static final RowMapper<ProductReviewDTO> productReviewRDTOowMapper = (rs, i) -> new ProductReviewDTO(
+    private static final RowMapper<ProductReviewDTO> productReviewDtoRowMapper = (rs, i) -> new ProductReviewDTO(
             UUID.fromString(rs.getString("id")),
             UUID.fromString(rs.getString("product_id")),
             rs.getString("product_name"),
@@ -35,7 +35,7 @@ public class ProductReviewRepository {
     public List<ProductReviewDTO> list() {
         return jdbcTemplate.query(
                 "select pr.id, pr.product_id, p.name as product_name, pr.score, pr.name, pr.comment, pr.created_at from product_reviews pr inner join products p on p.id = pr.product_id order by pr.created_at desc",
-                productReviewRDTOowMapper);
+                productReviewDtoRowMapper);
     }
 
     @Transactional(readOnly = true)
@@ -43,7 +43,7 @@ public class ProductReviewRepository {
         return jdbcTemplate.query(
                 "select pr.id, pr.product_id, p.name as product_name, pr.score, pr.name, pr.comment, pr.created_at from product_reviews pr inner join products p on p.id = pr.product_id where pr.product_id = :product_id order by pr.created_at desc",
                 Collections.singletonMap("product_id", productId),
-                productReviewRDTOowMapper);
+                productReviewDtoRowMapper);
     }
 
     @Transactional

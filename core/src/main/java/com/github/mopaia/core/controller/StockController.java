@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/stocks")
-public class StocksController {
+public class StockController {
 
     @GetMapping
     public ResponseEntity<String> getAvailableStocks() {

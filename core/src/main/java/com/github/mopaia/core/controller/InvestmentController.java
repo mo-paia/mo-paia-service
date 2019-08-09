@@ -21,7 +21,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/investments")
 @RequiredArgsConstructor
-public class InvestmentsController {
+public class InvestmentController {
 
     private final InvestmentRepository investmentRepository;
 

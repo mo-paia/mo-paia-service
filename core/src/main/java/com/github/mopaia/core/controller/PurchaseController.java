@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/purchases")
-public class PurchasesController {
+public class PurchaseController {
 
     @GetMapping
     public ResponseEntity<String> getAllPurchases() {
