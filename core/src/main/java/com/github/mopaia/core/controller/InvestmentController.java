@@ -1,9 +1,11 @@
 package com.github.mopaia.core.controller;
 
 import com.github.mopaia.core.controller.dto.InvestmentDepositRequestDTO;
+import com.github.mopaia.core.controller.dto.InvestmentWithdrawRequestDTO;
 import com.github.mopaia.core.dao.InvestmentRepository;
 import com.github.mopaia.core.dao.model.Investment;
 import com.github.mopaia.core.dao.model.InvestmentDeposit;
+import com.github.mopaia.core.dao.model.InvestmentWithdraw;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,6 +48,19 @@ public class InvestmentController {
     public ResponseEntity<Object> putMoneyOnInvestment(@PathVariable("id") UUID investmentId, @RequestBody @Valid InvestmentDepositRequestDTO investmentDepositRequestDTO) {
         return investmentRepository.deposit(investmentId, investmentDepositRequestDTO.getInvestorName(), investmentDepositRequestDTO.getAmount())
                 .map(deposit -> ResponseEntity.created(URI.create(String.format("/investments/%s/deposits/%s", investmentId, deposit.getId()))))
+                .orElseGet(ResponseEntity::badRequest)
+                .build();
+    }
+
+    @GetMapping("/{id}/withdraws")
+    public ResponseEntity<List<InvestmentWithdraw>> getInvestmentWithdraws(@PathVariable("id") UUID investmentId) {
+        return ResponseEntity.ok(investmentRepository.listWithdraws(investmentId));
+    }
+
+    @PostMapping("/{id}/withdraws")
+    public ResponseEntity<Object> getMoneyFromInvestment(@PathVariable("id") UUID investmentId, @RequestBody @Valid InvestmentWithdrawRequestDTO investmentWithdrawRequestDTO) {
+        return investmentRepository.withdraw(investmentId, investmentWithdrawRequestDTO.getAmount(), investmentWithdrawRequestDTO.getDestination().toString(), investmentWithdrawRequestDTO.getDestinationId())
+                .map(deposit -> ResponseEntity.created(URI.create(String.format("/investments/%s/withdraws/%s", investmentId, deposit.getId()))))
                 .orElseGet(ResponseEntity::badRequest)
                 .build();
     }
