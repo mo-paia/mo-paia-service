@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.github.mopaia.core.utils.SanitizerUtils.sanitize;
+
 @Repository
 @RequiredArgsConstructor
 public class PurchaseRepository {
@@ -76,12 +78,5 @@ public class PurchaseRepository {
         return returning.isEmpty()
                 ? Optional.empty()
                 : Optional.of(new Purchase(id, provider, providerUrl, providerOrderId, trackingCode, arrivedAt, returning.get(0)));
-    }
-
-    private String sanitize(String dirty) {
-        return Optional.ofNullable(dirty)
-                .map(String::trim)
-                .filter(s -> s.length() > 0)
-                .orElse(null);
     }
 }

@@ -2,6 +2,7 @@ package com.github.mopaia.core.dao;
 
 import com.github.mopaia.core.dao.dto.ProductReviewDTO;
 import com.github.mopaia.core.dao.model.ProductReview;
+import com.github.mopaia.core.utils.SanitizerUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -15,6 +16,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import static com.github.mopaia.core.utils.SanitizerUtils.sanitize;
 
 @Repository
 @RequiredArgsConstructor
@@ -55,8 +58,8 @@ public class ProductReviewRepository {
                         .addValue("id", id)
                         .addValue("product_id", productId)
                         .addValue("score", score)
-                        .addValue("name", name)
-                        .addValue("comment", comment)
+                        .addValue("name", sanitize(name))
+                        .addValue("comment", sanitize(comment))
                         .addValue("created_at", Timestamp.from(createdAt))) > 0
                 ? Optional.of(new ProductReview(id, productId, score, name, comment, createdAt))
                 : Optional.empty();
