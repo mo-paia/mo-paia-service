@@ -35,22 +35,27 @@ public class PurchaseItemController {
     }
 
     @PostMapping("/{id}/items")
-    public ResponseEntity<Purchase> createItemOnPurchase(@PathVariable("id") UUID purchaseId, @RequestBody @Valid PurchaseItemCreateRequestDTO purchaseItemCreateRequestDTO) {
-        return purchaseItemRepository.createOnPurchase(purchaseId, purchaseItemCreateRequestDTO.getProductId(), purchaseItemCreateRequestDTO.getQuantity(), purchaseItemCreateRequestDTO.getUnitPrice())
+    public ResponseEntity<Purchase> createItemOnPurchase(@PathVariable("id") UUID purchaseId,
+                                                         @RequestBody @Valid PurchaseItemCreateRequestDTO purchaseItemCreateRequestDTO) {
+        return purchaseItemRepository.createOnPurchase(purchaseId, purchaseItemCreateRequestDTO.getProductId(),
+                purchaseItemCreateRequestDTO.getQuantity(), purchaseItemCreateRequestDTO.getUnitPrice())
                 .map(purchaseItem -> ResponseEntity.created(URI.create(String.format("/purchases/%s/items/%s", purchaseId, purchaseItem.getId()))))
                 .orElseGet(ResponseEntity::badRequest)
                 .build();
     }
 
     @PutMapping("/{id}/items/{productItemId}")
-    public ResponseEntity<PurchaseItem> updateItemOnPurchase(@PathVariable("id") UUID purchaseId, @PathVariable("productItemId") UUID productItemId, @RequestBody PurchaseItemUpdateRequestDTO purchaseItemUpdateRequestDTO) {
+    public ResponseEntity<PurchaseItem> updateItemOnPurchase(@PathVariable("id") UUID purchaseId,
+                                                             @PathVariable("productItemId") UUID productItemId,
+                                                             @RequestBody PurchaseItemUpdateRequestDTO purchaseItemUpdateRequestDTO) {
         return purchaseItemRepository.update(purchaseId, productItemId, purchaseItemUpdateRequestDTO.getQuantity(), purchaseItemUpdateRequestDTO.getUnitPrice())
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @DeleteMapping("/{id}/items/{productItemId}")
-    public ResponseEntity<Object> deleteItemOnPurchase(@PathVariable("id") UUID purchaseId, @PathVariable("productItemId") UUID productItemId) {
+    public ResponseEntity<Object> deleteItemOnPurchase(@PathVariable("id") UUID purchaseId,
+                                                       @PathVariable("productItemId") UUID productItemId) {
         return purchaseItemRepository.delete(purchaseId, productItemId)
                 .map((UUID t) -> ResponseEntity.noContent().build())
                 .orElseGet(() -> ResponseEntity.badRequest().build());
